@@ -6,6 +6,11 @@ use App\Models\challenge;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
+
+use function PHPSTORM_META\type;
 
 class ChallengeController extends Controller
 {
@@ -50,7 +55,13 @@ class ChallengeController extends Controller
             'description' => $request->description,
             'hint' => $request->hint
         );
-        $this->challenge->create($arr_challenge);
+
+        $challenge_new = $this->challenge->create($arr_challenge);
+
+        if($request->hasFile('file')){
+            $origin_name = $request->file('file')->getClientOriginalName();
+            $request->file('file')->storeAs('public/files/challenge/'.$challenge_new->id,$origin_name);
+        }
         return redirect()->route('challenge.index')->with('message','Add success !');
     }
 
@@ -63,13 +74,8 @@ class ChallengeController extends Controller
     public function show( $id)
     {
         $challenge = $this->challenge->where('id',$id)->first();
-        $checkUserDone = DB::table('user_challenge')->where('challenge_id',$challenge->id)->where('user_id',Auth::user()->id)->first();
-        if($checkUserDone){
-            return redirect()->route('challenge.index');
-        }else{
-            $challenge->user()->attach(Auth::user()->id);
-            return view('stdview.challengeSingle',compact('challenge'));
-        }
+        return view('stdview.challengeSingle',compact('challenge'));
+        
     }
 
     /**
@@ -97,7 +103,14 @@ class ChallengeController extends Controller
             'title' => $request->title,
             'description' => $request->description
         );
-        $this->challenge->find($challenge)->update($arr);
+        $challenge_edit =  $this->challenge->find($challenge);
+        if($challenge_edit){
+            if($request->hasFile('file')){
+                $origin_name = $request->file('file')->getClientOriginalName();
+                $request->file('file')->storeAs('public/files/challenge/'.$challenge_edit->id,$origin_name);
+            }
+            $this->challenge->find($challenge)->update($arr);
+        }
         $item_update = $this->challenge->find($challenge);
         return redirect()->route('challenge.index')->with('message','Update success  "'.$item_update->name.'"');
     }
@@ -119,16 +132,30 @@ class ChallengeController extends Controller
         $challenge_item = $this->challenge->where('id',$request->challenge_id)->first();
         $users = $challenge_item->user()->paginate(5);
         
-        return view('stdview.challengeUserDone',compact('challenge_item','users'));;
+        return view('stdview.challengeUserDone',compact('challenge_item','users'));
     }
 
     public function donechallenge(Request $request)
     {
-        $checkUserDone = DB::table('user_challenge')->where('challenge_id',$request->challenge_id)->where('user_id',Auth::user()->id)->first();
-        if($checkUserDone){
-            DB::table('user_challenge')->where('challenge_id',$request->challenge_id)->where('user_id',Auth::user()->id)->update(['answer' => $request->answer]);
+        // answer challenge_id
+        $challenge_item = $this->challenge->where('id',$request->challenge_id)->first();
+        $files = File::allFiles('storage/files/challenge/'.$challenge_item->id);
+        foreach($files as $key => $file){
+            $pieces = explode(".",basename($file));
+            if($pieces[0] == $request->answer){
+                return back()->with('result',File::get($file));
+            }
         }
-        return redirect()->route('challenge.index')->with('message','Update success');
+        return back()->with('result','false');
+       
     }
+
+    public function createChallenge(Request $request)
+{
+    $arr_challenge = array(
+    );
+    $this->challenge->create($arr_challenge);
+    return redirect()->route('challenge.index')->with('message','Add success !');
+}
 
 }

@@ -1,7 +1,9 @@
 
+
+
 <div class="sidebar" id="mySidebar">
 <div class="side-header">
-    <img src="images/logo.png" width="120" height="120" alt="Swiss Collection"> 
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeX08GOYbivayOiDrsH6zWnkk0dd4HNvvmIA&usqp=CAU" width="120" height="120" style="border-radius: 50%; object-fit:cover; object-position:top;" alt="Swiss Collection" > 
     <h5 style="margin-top:10px;">Hello {{ Auth::user()->username }}</h5>
 </div>
 

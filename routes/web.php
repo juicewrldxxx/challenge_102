@@ -37,6 +37,8 @@ Route::get('user/show/{id}', [userController::class, 'show'])->name('user.show')
 Route::get('user/{user}', [userController::class, 'update'])->name('user.update')->middleware('admin');
 Route::post('message', [messageController::class, 'handleSendMessage'])->name('message.send');
 
+///
+
 Route::get('asm', [asmController::class, 'index'])->name('asm.index');
 Route::get('asm/delete/{asm}', [asmController::class, 'destroy'])->name('asm.destroy')->middleware('admin');
 Route::get('asm/edit/{asm}', [asmController::class, 'edit'])->name('asm.edit')->middleware('admin');
@@ -60,6 +62,8 @@ Route::get('challenge/create', [ChallengeController::class, 'create'])->name('ch
 Route::post('challenge/store', [ChallengeController::class, 'store'])->name('challenge.store')->middleware('admin');
 Route::post('challenge/donechallenge/{challenge_id}', [ChallengeController::class, 'donechallenge'])->name('challenge.donechallenge');
 Route::get('challenge/userDone/{challenge_id}', [ChallengeController::class, 'userDone'])->name('challenge.userDone')->middleware('admin');
+Route::get('challenge/createChallenge', [ChallengeController::class, 'createChallenge'])->name('challenge.createChallenge')->middleware('admin');
+
 
 
 

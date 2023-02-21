@@ -6,7 +6,7 @@
     @csrf
     <div class="form-group">
       <label for="InputName">Name </label>
-      <input type="text" class="form-control" id="InputName" placeholder="Enter Name" name="title" >
+      <input type="text" class="form-control" id="InputName" placeholder="Enter Name" name="title">
     </div>
     <div class="form-group">
       <label for="description">Description</label>
@@ -16,7 +16,12 @@
       <label for="description">Hint</label>
       <input type="text" class="form-control" id="hint" placeholder="Enter hint" name="hint">
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+
+    <!-- <form method="post" action="{{ route('challenge.createChallenge') }}" enctype="multipart/form-data" name = "create challenge">
+    @csrf -->
+    <label for="txt_file">Upload txt file:</label>
+    <input type="file" name="file" id="txt_file"><br>
+  <button type="submit" class="btn btn-primary">Submit</button>
   </form>
-    </div>
+</div>
 @endsection

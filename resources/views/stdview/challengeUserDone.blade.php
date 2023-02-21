@@ -24,10 +24,6 @@
                         <td>{{ $user->username }} </td>
                         <td>{{ $user_challenge->answer ? $user_challenge->answer : "not answer yet" }} </td>
                     </tr>
-
-
-
-                  
                     @endforeach
                     @endif
         </div>

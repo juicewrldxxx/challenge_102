@@ -19,6 +19,10 @@
       <label for="description">Hint</label>
       <input type="text" class="form-control" id="hint" placeholder="Enter hint" name="hint" value="{{ $challenge_item->hint }}">
     </div>
+    <div class="form-group">
+    <form method="post" action="{{ route('challenge.create') }}" enctype="multipart/form-data">
+    <label for="txt_file">Upload txt file:</label>
+    <input type="file" name="txt_file" id="txt_file"><br>
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
     </div>
